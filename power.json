@@ -1,0 +1,63 @@
+{
+  "name": "huggingface-on-aws",
+  "version": "0.1.0",
+  "description": "Deploy and train Hugging Face models on AWS with SageMaker AI and Neuron (Trainium/Inferentia). Provides MCP tools for endpoint management, training jobs, and instance recommendations, plus steering for TorchNeuron, distributed training, and model optimization.",
+  "author": "AWS",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/aws-samples/sample-huggingface-sagemaker-neuron-kiro-power",
+  "mcp": {
+    "servers": [
+      {
+        "name": "huggingface-hub",
+        "description": "Search and explore Hugging Face models, datasets, Spaces, and papers",
+        "type": "remote",
+        "url": "https://huggingface.co/mcp",
+        "config": {
+          "instructions": "Use this server to search for models on Hugging Face Hub, check model cards, find datasets, and discover Spaces. Configure via https://huggingface.co/settings/mcp"
+        }
+      },
+      {
+        "name": "sagemaker-neuron",
+        "description": "Deploy and train Hugging Face models on SageMaker AI with Neuron containers",
+        "type": "local",
+        "command": "python",
+        "args": ["-m", "sagemaker_neuron_server"],
+        "cwd": "mcp/sagemaker-neuron-server",
+        "env": {
+          "AWS_DEFAULT_REGION": "us-east-1"
+        }
+      }
+    ]
+  },
+  "steering": [
+    {
+      "path": "./steering/torchneuron.md",
+      "description": "TorchNeuron patterns, device placement, torch.compile, and migration from CUDA"
+    },
+    {
+      "path": "./steering/sagemaker-deployment.md",
+      "description": "SageMaker AI deployment patterns, DLC containers, SDK usage, and instance selection"
+    },
+    {
+      "path": "./steering/distributed-training.md",
+      "description": "Distributed training on Trainium with DDP, FSDP, TP, and multi-node"
+    },
+    {
+      "path": "./steering/model-optimization.md",
+      "description": "Model compilation, BF16, Neuron cache, vLLM serving, and NKI kernels"
+    }
+  ],
+  "hooks": [],
+  "keywords": [
+    "huggingface",
+    "sagemaker",
+    "neuron",
+    "trainium",
+    "inferentia",
+    "torchneuron",
+    "training",
+    "inference",
+    "llm",
+    "vllm"
+  ]
+}

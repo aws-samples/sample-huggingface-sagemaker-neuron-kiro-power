@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.egg-info/
+dist/
+build/
+.env
+.venv/
+*.log
+.DS_Store
+.kiro/
+.vscode/
+.gradio/
+__MACOSX/
+._*
+build/
+~/

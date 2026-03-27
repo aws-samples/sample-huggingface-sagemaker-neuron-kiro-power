@@ -1,0 +1,3 @@
+# Compatible versions for Neuron DLC training
+git+https://github.com/huggingface/trl.git@4fea6d13dbf61415a2df1447c5162dd0fede540c
+git+https://github.com/huggingface/optimum-neuron.git@6587f302cfcada9d5d69988b1d0bfc93afc361ef

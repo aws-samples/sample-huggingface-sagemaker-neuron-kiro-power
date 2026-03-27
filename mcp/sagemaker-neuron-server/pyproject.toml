@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sagemaker-neuron-server"
+version = "0.1.0"
+description = "MCP server for deploying and training Hugging Face models on AWS SageMaker with Neuron"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+dependencies = [
+    "mcp>=1.0.0",
+    "boto3>=1.34.0",
+    "sagemaker>=2.200.0,<3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.21",
+]
+
+[tool.setuptools.package-data]
+sagemaker_neuron_server = ["scripts/*.py", "scripts/requirements.txt"]

@@ -1,0 +1,24 @@
+boto3; version 1.40.54 -- https://pypi.org/project/boto3/
+sagemaker; version 2.253.1 -- https://pypi.org/project/sagemaker/
+mcp; version 1.26.0 -- https://pypi.org/project/mcp/
+huggingface-hub; version 1.7.2 -- https://pypi.org/project/huggingface-hub/
+gradio; version 6.9.0 -- https://pypi.org/project/gradio/
+peft; version 0.15.2 -- https://pypi.org/project/peft/
+transformers; version 4.55.4 -- https://pypi.org/project/transformers/
+optimum-neuron; version 0.4.4 -- https://pypi.org/project/optimum-neuron/
+
+The packages above are licensed under the Apache 2.0 License, MIT License, or BSD License.
+For detailed license information, please refer to the individual package documentation.
+
+Models (downloaded at runtime from Hugging Face Hub, not bundled):
+Qwen/Qwen3-0.6B -- https://huggingface.co/Qwen/Qwen3-0.6B -- Apache 2.0
+meta-llama/Llama-3.3-70B-Instruct -- https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct -- Llama 3.3 Community License (gated, requires acceptance)
+
+Datasets (downloaded at runtime from Hugging Face Hub, not bundled):
+wikitext (wikitext-2-raw-v1) -- https://huggingface.co/datasets/wikitext -- Creative Commons Attribution-ShareAlike 3.0
+
+Note: Models and datasets are fetched at runtime and are not distributed with this repository.
+Users are responsible for reviewing and complying with the respective licenses.
+
+External Services:
+Hugging Face MCP Server -- https://huggingface.co/mcp -- Subject to Hugging Face Terms of Service (https://huggingface.co/terms-of-service)
