@@ -1,0 +1,11 @@
+boto3; version 1.40.54 -- https://pypi.org/project/boto3/
+sagemaker; version 2.253.1 -- https://pypi.org/project/sagemaker/
+mcp; version 1.26.0 -- https://pypi.org/project/mcp/
+huggingface-hub; version 1.7.2 -- https://pypi.org/project/huggingface-hub/
+gradio; version 6.9.0 -- https://pypi.org/project/gradio/
+peft; version 0.15.2 -- https://pypi.org/project/peft/
+transformers; version 4.55.4 -- https://pypi.org/project/transformers/
+optimum-neuron; version 0.4.4 -- https://pypi.org/project/optimum-neuron/
+
+The packages above are licensed under the Apache 2.0 License, MIT License, or BSD License.
+For detailed license information, please refer to the individual package documentation.
