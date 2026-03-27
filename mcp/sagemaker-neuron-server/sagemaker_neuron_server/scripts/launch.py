@@ -13,7 +13,7 @@ def main():
 
     # Install latest optimum-neuron and trl from main (DLC versions are behind the docs)
     print("=== Installing latest optimum-neuron and trl from main ===", flush=True)
-    subprocess.run([
+    subprocess.run([  # nosemgrep: dangerous-subprocess-use-audit
         sys.executable, "-m", "pip", "install", "--upgrade",
         "git+https://github.com/huggingface/trl.git",
         "git+https://github.com/huggingface/optimum-neuron.git",

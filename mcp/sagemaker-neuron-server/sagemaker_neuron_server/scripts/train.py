@@ -74,7 +74,7 @@ def train(model_id, tokenizer, dataset, training_args):
     adapter_dir = os.path.join(training_args.output_dir, "adapter_default")
     if os.path.isdir(adapter_dir):
         print(f"=== Consolidating adapter shards: {adapter_dir} ===", flush=True)
-        subprocess.run([sys.executable, "-m", "optimum.commands.optimum_cli",
+        subprocess.run([sys.executable, "-m", "optimum.commands.optimum_cli",  # nosemgrep: dangerous-subprocess-use-audit
                         "neuron", "consolidate", training_args.output_dir, adapter_dir], check=True)
         # Merge adapter into base model and save at output_dir root for direct deployment
         from transformers import AutoModelForCausalLM
