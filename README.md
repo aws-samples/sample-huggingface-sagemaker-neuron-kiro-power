@@ -207,4 +207,8 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
 ## License
 
-Apache-2.0
+This project is licensed under the Apache-2.0 License. See the [LICENSE](LICENSE) file.
+
+## Disclaimer
+
+This solution is for demonstrative purposes only and is not intended for production use without additional security and compliance review. It is each customer's responsibility to ensure proper configuration of AWS services, IAM roles, and endpoint security for their specific use case.
