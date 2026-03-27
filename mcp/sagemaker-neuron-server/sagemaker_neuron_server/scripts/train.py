@@ -92,7 +92,7 @@ def train(model_id, tokenizer, dataset, training_args):
         # Add inference.py to fix Neuron HLO write path in read-only containers
         code_dir = os.path.join(training_args.output_dir, "code")
         os.makedirs(code_dir, exist_ok=True)
-        with open(os.path.join(code_dir, "inference.py"), "w") as f:
+        with open(os.path.join(code_dir, "inference.py"), "w", encoding="utf-8") as f:
             f.write("import os\\nos.chdir('/tmp')\\n")
         print(f"=== Merged model saved to {training_args.output_dir} ===", flush=True)
 

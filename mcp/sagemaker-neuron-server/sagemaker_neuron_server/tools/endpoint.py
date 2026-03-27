@@ -99,7 +99,7 @@ def register_endpoint_tools(mcp: FastMCP):
                     return json.dumps({"endpoint_name": endpoint_name, "status": "Failed", "reason": ep.get("FailureReason", "Unknown")})
             except ClientError as e:
                 return json.dumps({"error": str(e), "endpoint_name": endpoint_name})
-            _time.sleep(120)
+            _time.sleep(120)  # nosemgrep: arbitrary-sleep — intentional polling interval
         return json.dumps({"endpoint_name": endpoint_name, "status": "Timeout", "message": f"Endpoint not ready after {timeout_minutes} minutes."})
 
     @mcp.tool()
@@ -138,7 +138,7 @@ def register_endpoint_tools(mcp: FastMCP):
                 return json.dumps({"endpoint_name": endpoint_name, "prompt": prompt, "generated_text": text.strip()})
             except (ReadTimeoutError, ClientError) as e:
                 if attempt < max_retries:
-                    _time.sleep(30)
+                    _time.sleep(30)  # nosemgrep: arbitrary-sleep — intentional retry delay
                     continue
                 return json.dumps({
                     "endpoint_name": endpoint_name,
