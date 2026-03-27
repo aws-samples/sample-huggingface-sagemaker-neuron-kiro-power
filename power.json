@@ -4,7 +4,7 @@
   "description": "Deploy and train Hugging Face models on AWS with SageMaker and Neuron (Trainium/Inferentia). Provides MCP tools for endpoint management, training jobs, and instance recommendations, plus steering for TorchNeuron, distributed training, and model optimization.",
   "author": "AWS",
   "license": "Apache-2.0",
-  "repository": "https://github.com/aws-samples/huggingface-sagemaker-neuron-kiro-power",
+  "repository": "https://github.com/aws-samples/sample-huggingface-sagemaker-neuron-kiro-power",
   "mcp": {
     "servers": [
       {
