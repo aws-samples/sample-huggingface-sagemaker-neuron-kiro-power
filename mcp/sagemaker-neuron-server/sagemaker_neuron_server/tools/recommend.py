@@ -35,7 +35,7 @@ def _fetch_model_params(model_id: str) -> float | None:
             if total_bytes > 0:
                 return total_bytes / 2 / 1e9
 
-    except Exception:
+    except Exception:  # B110: intentional — HF Hub may be unreachable, fall back gracefully
         pass
 
     return None

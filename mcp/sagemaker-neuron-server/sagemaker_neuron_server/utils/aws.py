@@ -180,7 +180,7 @@ def get_container_image(use_case: str, region: str = "") -> str:
             if uri:
                 return uri
         except Exception:
-            pass  # fall back to hardcoded default
+            pass  # B110: intentional fallback — if ECR lookup fails, use hardcoded default image
 
     return dlc["image"].format(region=region)
 
