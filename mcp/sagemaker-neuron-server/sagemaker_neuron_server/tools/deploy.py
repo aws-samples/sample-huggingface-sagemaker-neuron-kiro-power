@@ -40,6 +40,11 @@ def register_deploy_tools(mcp: FastMCP):
         instance_type = instance_type or os.environ.get("INSTANCE_TYPE", "")
         role_arn = role_arn or get_sagemaker_role()
 
+        # Force inference serving type for fine-tuned models from S3
+        # (vLLM containers don't support model_data tar.gz pattern)
+        if model_data and serving_type == "vllm":
+            serving_type = "inference"
+
         if not instance_type:
             return json.dumps({"error": "instance_type is required. Set INSTANCE_TYPE env var or pass explicitly."})
         if not role_arn:

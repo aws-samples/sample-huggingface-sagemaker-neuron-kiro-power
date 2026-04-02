@@ -162,6 +162,13 @@ AWS_PROFILE=your-profile python app.py
 
 Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ENDPOINT_NAME` | SageMaker endpoint name | `qwen3-finetuned-kiro` |
+| `AWS_DEFAULT_REGION` | AWS region | `us-west-2` |
+| `MAX_NEW_TOKENS` | Max tokens to generate | `512` |
+| `AWS_PROFILE` | AWS CLI profile | `default` |
+
 ## Steering
 
 | File | Content |
