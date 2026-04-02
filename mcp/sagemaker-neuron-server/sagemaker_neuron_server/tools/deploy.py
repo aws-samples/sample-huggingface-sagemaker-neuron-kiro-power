@@ -76,8 +76,8 @@ def register_deploy_tools(mcp: FastMCP):
                 "HF_AUTO_CAST_TYPE": "bf16",
                 "HF_OPTIMUM_BATCH_SIZE": "1",
                 "HF_OPTIMUM_SEQUENCE_LENGTH": "4096",
-                "NEURON_COMPILE_CACHE_URL": "/tmp/neuron-cache",  # B108: container-only path, /tmp is the only writable dir in SageMaker inference containers
-                "NEURONX_DUMP_TO": "/tmp",  # B108: container-only path, required for Neuron compiler output
+                "NEURON_COMPILE_CACHE_URL": "/tmp/neuron-cache",  # container-only path, /tmp is the only writable dir in SageMaker inference containers
+                "NEURONX_DUMP_TO": "/tmp",  # container-only path, required for Neuron compiler output
                 **extra_env,
             }
             if not model_data:
