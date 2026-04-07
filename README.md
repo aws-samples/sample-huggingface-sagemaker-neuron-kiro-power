@@ -31,7 +31,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
                                                                                  │
                                                                                  ▼
   ┌─────────┐                                                           Amazon SageMaker AI
-  │ Gradio  │----──────────────────────────────────────────────────────► (endpoints, jobs)
+  │ Gradio  │──────────────────────────────────────────────────────►    (endpoints, jobs)
   │ Chat UI │                                                                    │
   └─────────┘                                                              ┌─────┴─────┐
                                                                            ▼           ▼
