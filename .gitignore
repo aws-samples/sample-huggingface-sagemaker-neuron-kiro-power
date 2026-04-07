@@ -10,3 +10,5 @@ build/
 .kiro/
 .vscode/
 .gradio/
+__MACOSX/
+._*

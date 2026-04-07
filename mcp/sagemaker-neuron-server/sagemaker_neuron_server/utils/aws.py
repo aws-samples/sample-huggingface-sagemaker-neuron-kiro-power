@@ -4,7 +4,7 @@ import os
 import boto3
 from botocore.exceptions import ClientError
 
-# Default Neuron DLC container images (HF-published) — override via env vars
+# Default Neuron DLC container images — fallback only when dynamic ECR lookup fails. Override via env vars.
 _DEFAULT_TRAINING_DLC = "763104351884.dkr.ecr.{region}.amazonaws.com/huggingface-pytorch-training-neuronx:2.8.0-transformers4.55.4-neuronx-py310-sdk2.26.0-ubuntu22.04"
 _DEFAULT_INFERENCE_DLC = "763104351884.dkr.ecr.{region}.amazonaws.com/huggingface-pytorch-inference-neuronx:2.8-neuronx-py310-sdk2.26.0-ubuntu22.04-v1"
 _DEFAULT_VLLM_DLC = "763104351884.dkr.ecr.{region}.amazonaws.com/huggingface-vllm-inference-neuronx:0.11.0-optimum0.4.4-neuronx-py310-sdk2.26.1-ubuntu22.04"

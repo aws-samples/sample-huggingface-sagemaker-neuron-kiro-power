@@ -5,44 +5,38 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
 ## Architecture
 
 ```
-┌───────────────┐   ┌──────────────────────────────────────────────────┐
-│               │   │                   Kiro IDE                        │
-│ Gradio        │   │                                                  │
-│ Chat UI       │   │  ┌──────────────────────────────────────────┐    │
-│               │   │  │        Kiro Power (power.json)           │    │
-│               │   │  │                                          │    │
-│               │   │  │  Steering Docs:                          │    │
-│               │   │  │   • TorchNeuron Patterns                 │    │
-│               │   │  │   • SageMaker Deployment                 │    │
-│               │   │  │   • Distributed Training                 │    │
-│               │   │  │   • Model Optimization                   │    │
-│               │   │  │                                          │    │
-│               │   │  │  MCP Servers:                            │    │
-│               │   │  │   • Hugging Face MCP Server (remote)     │    │
-│               │   │  │     Model discovery, search, model cards │    │
-│               │   │  │                                          │    │
-│               │   │  │   • SageMaker Neuron MCP Server (custom) │    │
-│               │   │  │     9 tools: recommend, deploy, train,   │    │
-│               │   │  │     invoke, list, describe, delete,      │    │
-│               │   │  │     wait_for_endpoint, describe_job      │    │
-│               │   │  └──────────────────────────────────────────┘    │
-│               │   │                                                  │
-│               │   │        Anthropic Claude Sonnet 4.x               │
-│               │   │            on Amazon Bedrock                     │
-│               │   │     (orchestrates, grounds, validates)           │
-│               │   │                                                  │
-│               │   └────────────────────┬─────────────────────────────┘
-│               │                        │
-└───────┬───────┘                        │
-        │            ┌───────────────────┼──────────────┐
-        │            ▼                   ▼              ▼
-        │      Hugging Face Hub    Amazon ECR     Amazon SageMaker AI
-        │      (models, datasets)  (DLC images)   (endpoints, jobs)
-        │                                               │
-        │                                         ┌─────┴─────┐
-        │                                         ▼           ▼
-        └──────────────────────────────────► AWS Trainium  AWS Inferentia
-                                             (fine-tuning) (inference)
+                          ┌──────────────────────────────────────────────────┐
+                          │                   Kiro IDE                        │
+                          │                                                  │
+                          │  ┌────────────────────────────────────────────┐  │
+                          │  │        Kiro Power (power.json)             │  │
+                          │  │                                            │  │
+                          │  │  Steering Docs:                            │  │
+                          │  │   • TorchNeuron Patterns                   │  │
+                          │  │   • SageMaker Deployment                   │  │
+                          │  │   • Distributed Training                   │  │
+                          │  │   • Model Optimization                     │  │
+                          │  │                                            │  │
+  ┌──────────────────┐    │  │  MCP Servers:                              │  │
+  │ Amazon Bedrock   │    │  │   • Hugging Face MCP Server (remote) ──────┼──┼──► Hugging Face Hub
+  │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
+  │ Claude Sonnet 4.x│◄──┼──┼──►                                         │  │
+  │ (orchestrates,   │    │  │   • SageMaker Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
+  │  grounds,        │    │  │     9 tools: recommend, deploy, train,     │  │    (DLC images)
+  │  validates)      │    │  │     invoke, list, describe, delete,        │  │
+  └──────────────────┘    │  │     wait_for_endpoint, describe_job ───────┼──┼───┐
+                          │  └────────────────────────────────────────────┘  │   │
+                          │                                                  │   │
+                          └──────────────────────────────────────────────────┘   │
+                                                                                │
+                                                                                ▼
+  ┌─────────┐                                                      Amazon SageMaker AI
+  │ Gradio  │──────────────────────────────────────────────────────►(endpoints, jobs)
+  │ Chat UI │                                                              │
+  └─────────┘                                                        ┌─────┴─────┐
+                                                                     ▼           ▼
+                                                               AWS Trainium  AWS Inferentia
+                                                               (fine-tuning) (inference)
 ```
 
 ## What It Does

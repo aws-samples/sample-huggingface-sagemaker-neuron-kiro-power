@@ -8,7 +8,7 @@ from pathlib import Path
 from mcp.server.fastmcp import FastMCP
 from ..utils.aws import get_sagemaker_role, get_container_image
 
-# Training scripts are in separate files (not embedded) per security best practices.
+# Training scripts are in separate files (not embedded) to avoid inline script patterns.
 # They are copied to a temp dir and uploaded to SageMaker for remote execution on Trainium.
 _SCRIPTS_DIR = Path(__file__).parent.parent / "scripts"
 
