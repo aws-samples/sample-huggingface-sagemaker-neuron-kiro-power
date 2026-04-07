@@ -6,7 +6,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
 
 ```
                           ┌──────────────────────────────────────────────────┐
-                          │                   Kiro IDE                        │
+                          │                   Kiro IDE                       │
                           │                                                  │
                           │  ┌────────────────────────────────────────────┐  │
                           │  │        Kiro Power (power.json)             │  │
@@ -20,7 +20,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   ┌──────────────────┐    │  │  MCP Servers:                              │  │
   │ Amazon Bedrock   │    │  │   • Hugging Face MCP Server (remote) ──────┼──┼──► Hugging Face Hub
   │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
-  │ Claude Sonnet 4.x│◄──┼──┼──►                                         │  │
+  │ Claude Sonnet 4.x│◄──-┼──┼──►                                         │  │
   │ (orchestrates,   │    │  │   • SageMaker Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
   │  grounds,        │    │  │     9 tools: recommend, deploy, train,     │  │    (DLC images)
   │  validates)      │    │  │     invoke, list, describe, delete,        │  │
@@ -28,15 +28,15 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
                           │  └────────────────────────────────────────────┘  │   │
                           │                                                  │   │
                           └──────────────────────────────────────────────────┘   │
-                                                                                │
-                                                                                ▼
-  ┌─────────┐                                                      Amazon SageMaker AI
-  │ Gradio  │──────────────────────────────────────────────────────►(endpoints, jobs)
-  │ Chat UI │                                                              │
-  └─────────┘                                                        ┌─────┴─────┐
-                                                                     ▼           ▼
-                                                               AWS Trainium  AWS Inferentia
-                                                               (fine-tuning) (inference)
+                                                                                 │
+                                                                                 ▼
+  ┌─────────┐                                                           Amazon SageMaker AI
+  │ Gradio  │----──────────────────────────────────────────────────────► (endpoints, jobs)
+  │ Chat UI │                                                                    │
+  └─────────┘                                                              ┌─────┴─────┐
+                                                                           ▼           ▼
+                                                                      AWS Trainium  AWS Inferentia
+                                                                     (fine-tuning)    (inference)
 ```
 
 ## What It Does
