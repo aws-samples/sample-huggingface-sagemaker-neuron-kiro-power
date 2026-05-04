@@ -11,7 +11,7 @@ from transformers import AutoTokenizer, HfArgumentParser
 from optimum.neuron import NeuronSFTConfig, NeuronSFTTrainer, NeuronTrainingArguments
 from optimum.neuron.models.training import NeuronModelForCausalLM
 
-# Dataset — using wikitext for demo; override via --dataset_name / --dataset_config
+# Dataset — using wikitext (CC BY-SA 3.0) for demo; override via --dataset_name / --dataset_config
 def load_and_prepare_dataset(tokenizer, dataset_name, dataset_config):
     dataset = load_dataset(dataset_name, dataset_config, split="train[:2000]")
     dataset = dataset.filter(lambda x: x["text"] is not None and len(x["text"].strip()) > 10)
@@ -74,7 +74,7 @@ def train(model_id, tokenizer, dataset, training_args):
     adapter_dir = os.path.join(training_args.output_dir, "adapter_default")
     if os.path.isdir(adapter_dir):
         print(f"=== Consolidating adapter shards: {adapter_dir} ===", flush=True)
-        subprocess.run([sys.executable, "-m", "optimum.commands.optimum_cli",  # nosemgrep: dangerous-subprocess-use-audit
+        subprocess.run([sys.executable, "-m", "optimum.commands.optimum_cli",  # runs on SageMaker AI training instance only
                         "neuron", "consolidate", training_args.output_dir, adapter_dir], check=True)
         # Merge adapter into base model and save at output_dir root for direct deployment
         from transformers import AutoModelForCausalLM

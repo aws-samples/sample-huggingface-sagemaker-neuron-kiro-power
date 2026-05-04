@@ -1,4 +1,4 @@
-"""SageMaker + Neuron MCP Server for Hugging Face models."""
+"""SageMaker AI + Neuron MCP Server for Hugging Face models."""
 
 from mcp.server.fastmcp import FastMCP
 

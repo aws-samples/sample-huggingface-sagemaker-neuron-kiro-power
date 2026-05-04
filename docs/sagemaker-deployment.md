@@ -1,14 +1,14 @@
-# SageMaker Deployment — Hugging Face Models on Neuron
+# SageMaker AI Deployment — Hugging Face Models on Neuron
 
 ## Overview
 
-Deploy Hugging Face models on Amazon SageMaker using Neuron-optimized Deep Learning Containers (DLCs). Supports inference on Inferentia 2 and training on Trainium instances.
+Deploy Hugging Face models on Amazon SageMaker AI using Neuron-optimized Deep Learning Containers (DLCs). Supports inference on Inferentia 2 and training on Trainium instances.
 
 ## Deployment Paths
 
 | Path | Best For | Complexity |
 |---|---|---|
-| SageMaker SDK | Custom deployments, full control | Medium |
+| SageMaker AI SDK | Custom deployments, full control | Medium |
 | SageMaker JumpStart | Quick deployment of popular models | Low |
 | vLLM on Neuron | High-performance LLM serving | Medium |
 
@@ -29,7 +29,7 @@ Deploy Hugging Face models on Amazon SageMaker using Neuron-optimized Deep Learn
 763104351884.dkr.ecr.{region}.amazonaws.com/huggingface-vllm-inference-neuronx:0.11.0-optimum0.4.4-neuronx-py310-sdk2.26.1-ubuntu22.04
 ```
 
-## Deploy with SageMaker SDK
+## Deploy with SageMaker AI SDK
 
 ### Inference Endpoint
 
@@ -82,7 +82,7 @@ predictor = model.deploy(
 )
 ```
 
-## Train with SageMaker SDK
+## Train with SageMaker AI SDK
 
 ```python
 from sagemaker.huggingface import HuggingFace

@@ -1,4 +1,4 @@
-"""Deploy Hugging Face models to SageMaker endpoints with Neuron containers."""
+"""Deploy Hugging Face models to SageMaker AI endpoints with Neuron containers."""
 
 import json
 import time
@@ -21,8 +21,9 @@ def register_deploy_tools(mcp: FastMCP):
         env_vars: str = "{}",
         image_uri: str = "",
         model_data: str = "",
+        kms_key_id: str = "",
     ) -> str:
-        """Deploy a Hugging Face model to a SageMaker endpoint with Neuron.
+        """Deploy a Hugging Face model to a SageMaker AI endpoint with Neuron.
 
         Args:
             model_id: HF model ID (e.g., 'meta-llama/Llama-3.3-70B-Instruct'). Ignored when model_data is set.
@@ -35,6 +36,13 @@ def register_deploy_tools(mcp: FastMCP):
             env_vars: JSON string of additional environment variables
             image_uri: Override container image URI (uses latest ECR image if empty)
             model_data: S3 URI of model.tar.gz for fine-tuned model deployment
+            kms_key_id: Optional KMS key ARN for encryption at rest (uses AWS-managed keys if empty)
+
+        Required IAM Permissions:
+            sagemaker:CreateModel, CreateEndpoint, CreateEndpointConfig, DescribeEndpoint, DeleteEndpoint
+            s3:GetObject on model artifact locations
+            ecr:GetAuthorizationToken, BatchCheckLayerAvailability, GetDownloadUrlForLayer, BatchGetImage
+            logs:CreateLogGroup, CreateLogStream, PutLogEvents
         """
         import os
         instance_type = instance_type or os.environ.get("INSTANCE_TYPE", "")
@@ -69,6 +77,8 @@ def register_deploy_tools(mcp: FastMCP):
 
             image_uri = image_uri or get_container_image(serving_type, region)
             extra_env = json.loads(env_vars) if env_vars else {}
+            if not isinstance(extra_env, dict):
+                return json.dumps({"error": "env_vars must be a JSON object."})
 
             env = {
                 "NEURON_RT_NUM_CORES": str(num_neuron_cores),
@@ -104,9 +114,9 @@ def register_deploy_tools(mcp: FastMCP):
                 ExecutionRoleArn=role_arn,
             )
 
-            sm.create_endpoint_config(
-                EndpointConfigName=config_name,
-                ProductionVariants=[{
+            endpoint_config = {
+                "EndpointConfigName": config_name,
+                "ProductionVariants": [{
                     "VariantName": "primary",
                     "ModelName": model_name,
                     "InstanceType": instance_type,
@@ -114,7 +124,10 @@ def register_deploy_tools(mcp: FastMCP):
                     "ContainerStartupHealthCheckTimeoutInSeconds": 900,
                     "ModelDataDownloadTimeoutInSeconds": 900,
                 }],
-            )
+            }
+            if kms_key_id:
+                endpoint_config["KmsKeyId"] = kms_key_id
+            sm.create_endpoint_config(**endpoint_config)
 
             sm.create_endpoint(
                 EndpointName=endpoint_name,
@@ -130,7 +143,7 @@ def register_deploy_tools(mcp: FastMCP):
         import time as _time
         deadline = _time.time() + 15 * 60
         while _time.time() < deadline:
-            _time.sleep(120)  # nosemgrep: arbitrary-sleep — intentional polling interval
+            _time.sleep(120)  # intentional polling interval
             try:
                 ep = sm.describe_endpoint(EndpointName=endpoint_name)
                 status = ep["EndpointStatus"]

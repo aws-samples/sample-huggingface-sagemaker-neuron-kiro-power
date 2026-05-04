@@ -137,8 +137,14 @@ def get_s3_client(region: str = "") -> boto3.client:
     return boto3.client("s3", region_name=region or _get_default_region())
 
 
-def _get_latest_ecr_image(repo_name: str, region: str, registry: str = "763104351884") -> str:
+_TRUSTED_ECR_REGISTRIES = {os.environ.get("AWS_DLC_REGISTRY", "763104351884")}
+
+
+def _get_latest_ecr_image(repo_name: str, region: str, registry: str = None) -> str:
     """Query ECR for the latest tagged image in a repository."""
+    registry = registry or os.environ.get("AWS_DLC_REGISTRY", "763104351884")
+    if registry not in _TRUSTED_ECR_REGISTRIES:
+        raise ValueError(f"Untrusted ECR registry: {registry}. Configure AWS_DLC_REGISTRY env var.")
     ecr = boto3.client("ecr", region_name=region)
     resp = ecr.describe_images(
         registryId=registry,

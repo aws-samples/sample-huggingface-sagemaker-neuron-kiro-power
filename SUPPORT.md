@@ -11,7 +11,7 @@ This is sample code provided for educational and demonstration purposes. Support
 
 ### Documentation
 - Review the [README.md](README.md) for setup and usage instructions
-- Check the [notebook](Huggingface-kiro-powers.ipynb) for interactive examples in SageMaker Studio
+- Check the [notebook](Huggingface-kiro-powers.ipynb) for interactive examples in SageMaker AI Studio
 - Refer to the steering docs in `steering/` for domain knowledge
 
 ### Common Issues
@@ -22,7 +22,7 @@ This is sample code provided for educational and demonstration purposes. Support
 
 ## What This Project Is
 - **Sample code** demonstrating Kiro Power integration with Hugging Face and AWS Neuron
-- **Educational resource** for deploying and fine-tuning HF models on SageMaker with Neuron
+- **Educational resource** for deploying and fine-tuning HF models on SageMaker AI with Neuron
 - **Reference implementation** for MCP-based AI tooling
 
 ## What This Project Is Not

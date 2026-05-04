@@ -1,11 +1,11 @@
 # Example: Fine-tune Qwen3 1.7B on Trainium
 
-Fine-tune Qwen3 1.7B for instruction following using SageMaker training jobs on Trainium.
+Fine-tune Qwen3 1.7B for instruction following using SageMaker AI training jobs on Trainium.
 
 ## Prerequisites
 
-- AWS account with SageMaker access
-- IAM role with SageMaker, S3, and ECR permissions
+- AWS account with SageMaker AI access
+- IAM role with SageMaker AI, S3, and ECR permissions
 - Service quota for `ml.trn1.2xlarge`
 
 ## Training Script
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     main()
 ```
 
-## Launch on SageMaker
+## Launch on SageMaker AI
 
 ```python
 import sagemaker

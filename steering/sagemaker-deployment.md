@@ -1,8 +1,8 @@
-# SageMaker Deployment — Hugging Face on Neuron
+# SageMaker AI Deployment — Hugging Face on Neuron
 
 ## When to Activate
 
-Activate when the user is deploying or managing SageMaker endpoints or training jobs with Hugging Face models on Neuron hardware.
+Activate when the user is deploying or managing SageMaker AI endpoints or training jobs with Hugging Face models on Neuron hardware.
 
 ## Neuron DLC Container Images
 
@@ -26,7 +26,7 @@ Supported instances: ml.inf2.24xlarge, ml.inf2.48xlarge, ml.trn1.32xlarge, ml.tr
 
 ## Deployment Patterns
 
-### Quick Deploy (SageMaker SDK)
+### Quick Deploy (SageMaker AI SDK)
 ```python
 from sagemaker.huggingface import HuggingFaceModel
 model = HuggingFaceModel(role=role, image_uri=neuron_image, env={"HF_MODEL_ID": model_id})
@@ -54,5 +54,5 @@ estimator.fit({"train": s3_train_path})
 - Use `us-east-1` or `us-west-2` for best Neuron DLC availability
 - Replace `{region}` in container URIs with your target region
 - Set `container_startup_health_check_timeout=1800` for large LLMs
-- SageMaker SDK v2 is required (`pip install "sagemaker<3.0.0"`)
+- SageMaker AI SDK v2 is required (`pip install "sagemaker<3.0.0"`)
 - Always clean up endpoints after testing

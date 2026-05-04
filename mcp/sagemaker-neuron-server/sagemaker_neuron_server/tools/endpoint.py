@@ -1,4 +1,4 @@
-"""Manage SageMaker endpoints and training jobs."""
+"""Manage SageMaker AI endpoints and training jobs."""
 
 import json
 import os
@@ -15,7 +15,7 @@ def register_endpoint_tools(mcp: FastMCP):
 
     @mcp.tool()
     def list_endpoints(region: str = "", status_filter: str = "InService") -> str:
-        """List SageMaker endpoints, optionally filtered by status.
+        """List SageMaker AI endpoints, optionally filtered by status.
 
         Args:
             region: AWS region
@@ -37,7 +37,7 @@ def register_endpoint_tools(mcp: FastMCP):
 
     @mcp.tool()
     def describe_endpoint(endpoint_name: str, region: str = "") -> str:
-        """Get details of a SageMaker endpoint.
+        """Get details of a SageMaker AI endpoint.
 
         Args:
             endpoint_name: Name of the SageMaker endpoint
@@ -59,7 +59,7 @@ def register_endpoint_tools(mcp: FastMCP):
 
     @mcp.tool()
     def delete_endpoint(endpoint_name: str, region: str = "") -> str:
-        """Delete a SageMaker endpoint.
+        """Delete a SageMaker AI endpoint.
 
         Args:
             endpoint_name: Name of the SageMaker endpoint to delete
@@ -79,7 +79,7 @@ def register_endpoint_tools(mcp: FastMCP):
 
     @mcp.tool()
     def wait_for_endpoint(endpoint_name: str, region: str = "", timeout_minutes: int = 15) -> str:
-        """Poll a SageMaker endpoint until it reaches InService or fails.
+        """Poll a SageMaker AI endpoint until it reaches InService or fails.
 
         Args:
             endpoint_name: Name of the SageMaker endpoint
@@ -99,12 +99,12 @@ def register_endpoint_tools(mcp: FastMCP):
                     return json.dumps({"endpoint_name": endpoint_name, "status": "Failed", "reason": ep.get("FailureReason", "Unknown")})
             except ClientError as e:
                 return json.dumps({"error": str(e), "endpoint_name": endpoint_name})
-            _time.sleep(120)  # nosemgrep: arbitrary-sleep — intentional polling interval
+            _time.sleep(120)  # intentional polling interval
         return json.dumps({"endpoint_name": endpoint_name, "status": "Timeout", "message": f"Endpoint not ready after {timeout_minutes} minutes."})
 
     @mcp.tool()
     def invoke_endpoint(endpoint_name: str, prompt: str, region: str = "", max_new_tokens: int = 512) -> str:
-        """Send a prompt to a SageMaker endpoint and return the generated text.
+        """Send a prompt to a SageMaker AI endpoint and return the generated text.
 
         Args:
             endpoint_name: Name of the SageMaker endpoint
@@ -138,7 +138,7 @@ def register_endpoint_tools(mcp: FastMCP):
                 return json.dumps({"endpoint_name": endpoint_name, "prompt": prompt, "generated_text": text.strip()})
             except (ReadTimeoutError, ClientError) as e:
                 if attempt < max_retries:
-                    _time.sleep(30)  # nosemgrep: arbitrary-sleep — intentional retry delay
+                    _time.sleep(30)  # intentional retry delay
                     continue
                 return json.dumps({
                     "endpoint_name": endpoint_name,
@@ -147,10 +147,10 @@ def register_endpoint_tools(mcp: FastMCP):
 
     @mcp.tool()
     def describe_training_job(job_name: str, region: str = "") -> str:
-        """Get details and status of a SageMaker training job.
+        """Get details and status of a SageMaker AI training job.
 
         Args:
-            job_name: Name of the SageMaker training job
+            job_name: Name of the SageMaker AI training job
             region: AWS region
         """
         sm = get_sagemaker_client(_region(region))

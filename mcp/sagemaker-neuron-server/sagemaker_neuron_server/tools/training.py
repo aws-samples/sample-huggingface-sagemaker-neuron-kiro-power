@@ -1,4 +1,4 @@
-"""Launch SageMaker training jobs for Hugging Face models on Trainium."""
+"""Launch SageMaker AI training jobs for Hugging Face models on Trainium."""
 
 import json
 import os
@@ -9,7 +9,7 @@ from mcp.server.fastmcp import FastMCP
 from ..utils.aws import get_sagemaker_role, get_container_image
 
 # Training scripts are in separate files (not embedded) to avoid inline script patterns.
-# They are copied to a temp dir and uploaded to SageMaker for remote execution on Trainium.
+# They are copied to a temp dir and uploaded to SageMaker AI for remote execution on Trainium.
 _SCRIPTS_DIR = Path(__file__).parent.parent / "scripts"
 
 # Neuron compiler environment flags (recommended by HF docs)
@@ -56,14 +56,15 @@ def register_training_tools(mcp: FastMCP):
         volume_size_gb: int = 0,
         max_runtime_seconds: int = 86400,
         tensor_parallel_size: int = 0,
+        kms_key_id: str = "",
     ) -> str:
-        """Launch a fine-tuning job for a Hugging Face model on Trainium via SageMaker.
+        """Launch a fine-tuning job for a Hugging Face model on Trainium via SageMaker AI.
 
         Uses optimum-neuron (NeuronSFTTrainer) — the HF-recommended approach for Trainium.
 
         Args:
             model_id: HF model ID (e.g., 'Qwen/Qwen3-1.7B')
-            job_name: Name for the SageMaker training job
+            job_name: Name for the SageMaker AI training job
             instance_type: Trainium instance type (from env INSTANCE_TYPE or provide explicitly)
             region: AWS region (from env AWS_DEFAULT_REGION or provide explicitly)
             role_arn: IAM role ARN (auto-detected from env SAGEMAKER_ROLE_ARN or SageMaker session)
@@ -77,6 +78,16 @@ def register_training_tools(mcp: FastMCP):
             volume_size_gb: EBS volume size in GB (auto-sized per instance if 0)
             max_runtime_seconds: Max training time in seconds (default 24h)
             tensor_parallel_size: Neuron cores for tensor parallelism (auto-detected from instance if 0)
+            kms_key_id: Optional KMS key ARN for encryption at rest (uses AWS-managed keys if empty)
+
+        Required IAM Permissions:
+            sagemaker:CreateTrainingJob, DescribeTrainingJob
+            s3:GetObject, PutObject, ListBucket on training data and output paths
+            ecr:GetAuthorizationToken, BatchCheckLayerAvailability, GetDownloadUrlForLayer, BatchGetImage
+            logs:CreateLogGroup, CreateLogStream, PutLogEvents
+
+        Note: S3 buckets must have Block Public Access enabled, encryption at rest,
+        and bucket policies enforcing TLS/HTTPS transport.
         """
         region = region or os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
         instance_type = instance_type or os.environ.get("INSTANCE_TYPE", "")
@@ -98,6 +109,8 @@ def register_training_tools(mcp: FastMCP):
 
             sess = sagemaker.Session(boto_session=__import__('boto3').Session(region_name=region))
             extra_hp = json.loads(hyperparameters) if hyperparameters else {}
+            if not isinstance(extra_hp, dict):
+                return json.dumps({"error": "hyperparameters must be a JSON object."})
 
             if volume_size_gb <= 0:
                 volume_size_gb = _INSTANCE_VOLUMES.get(instance_type, 256)
@@ -155,6 +168,9 @@ def register_training_tools(mcp: FastMCP):
                 base_job_name=job_name,
                 environment=env,
             )
+            if kms_key_id:
+                estimator_kwargs["volume_kms_key"] = kms_key_id
+                estimator_kwargs["output_kms_key"] = kms_key_id
 
             estimator.fit(wait=False)
             actual_job_name = estimator.latest_training_job.name
@@ -171,5 +187,5 @@ def register_training_tools(mcp: FastMCP):
             "tensor_parallel_size": tensor_parallel_size,
             "entry_point": entry_point,
             "region": region,
-            "message": f"Training job '{actual_job_name}' launched via HuggingFace Estimator with optimum-neuron. Monitor in SageMaker console.",
+            "message": f"Training job '{actual_job_name}' launched via HuggingFace Estimator with optimum-neuron. Monitor in SageMaker AI console.",
         })

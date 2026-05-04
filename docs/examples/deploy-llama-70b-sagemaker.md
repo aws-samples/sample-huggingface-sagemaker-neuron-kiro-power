@@ -1,11 +1,11 @@
-# Example: Deploy Llama 3.3 70B on SageMaker with Neuron
+# Example: Deploy Llama 3.3 70B on SageMaker AI with Neuron
 
-Deploy Meta's Llama 3.3 70B Instruct model on a SageMaker endpoint using vLLM on Inferentia 2.
+Deploy Meta's Llama 3.3 70B Instruct model on a SageMaker AI endpoint using vLLM on Inferentia 2.
 
 ## Prerequisites
 
-- AWS account with SageMaker access
-- IAM role with SageMaker, S3, and ECR permissions
+- AWS account with SageMaker AI access
+- IAM role with SageMaker AI, S3, and ECR permissions
 - Service quota for `ml.inf2.48xlarge` (request via AWS console if needed)
 - Hugging Face token with access to Llama 3.3 (accept license on HF Hub)
 
@@ -64,7 +64,7 @@ predictor.delete_endpoint()
 
 ## Cost Estimate
 
-- `ml.inf2.48xlarge`: Check [SageMaker pricing](https://aws.amazon.com/sagemaker/pricing/) for current rates
+- `ml.inf2.48xlarge`: Check [SageMaker AI pricing](https://aws.amazon.com/sagemaker/pricing/) for current rates
 - First deployment takes ~15-30 min (model download + Neuron compilation)
 - Subsequent deployments are faster if using cached compilations
 

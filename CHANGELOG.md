@@ -8,13 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2026-03-26
 
 ### Added
-- Initial release of Kiro Power for Hugging Face models on SageMaker Neuron
+- Initial release of Kiro Power for Hugging Face models on SageMaker AI Neuron
 - 9 MCP tools: deploy_model, create_training_job, invoke_endpoint, recommend_instance, list_endpoints, describe_endpoint, delete_endpoint, wait_for_endpoint, describe_training_job
 - HF Hub MCP Server integration for model discovery and search
-- Custom SageMaker Neuron MCP Server with FastMCP
-- 4 steering docs: TorchNeuron Patterns, SageMaker Deployment, Distributed Training, Model Optimization
+- Custom SageMaker AI Neuron MCP Server with FastMCP
+- 4 steering docs: TorchNeuron Patterns, SageMaker AI Deployment, Distributed Training, Model Optimization
 - Gradio chat UI for deployed endpoints
-- SageMaker Studio notebook for end-to-end testing
+- SageMaker AI Studio notebook for end-to-end testing
 - Auto-retry for Neuron cold-start compilation timeouts
 - Dynamic ECR container image lookup (no hardcoded image tags)
 - Neuron compile parameter auto-derivation from model size and instance type

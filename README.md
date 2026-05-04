@@ -13,7 +13,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
                           │  │                                            │  │
                           │  │  Steering Docs:                            │  │
                           │  │   • TorchNeuron Patterns                   │  │
-                          │  │   • SageMaker Deployment                   │  │
+                          │  │   • SageMaker AI Deployment                   │  │
                           │  │   • Distributed Training                   │  │
                           │  │   • Model Optimization                     │  │
                           │  │                                            │  │
@@ -21,7 +21,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   │ Amazon Bedrock   │    │  │   • Hugging Face MCP Server (remote) ──────┼──┼──► Hugging Face Hub
   │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
   │ Claude Sonnet 4.x│◄──-┼──┼──►                                         │  │
-  │ (orchestrates,   │    │  │   • SageMaker Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
+  │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
   │  grounds,        │    │  │     9 tools: recommend, deploy, train,     │  │    (DLC images)
   │  validates)      │    │  │     invoke, list, describe, delete,        │  │
   └──────────────────┘    │  │     wait_for_endpoint, describe_job ───────┼──┼───┐
@@ -44,7 +44,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
 This Power gives Kiro two complementary MCP servers:
 
 - **HF Hub MCP** — Model discovery, search, and metadata from Hugging Face Hub
-- **SageMaker Neuron MCP** — Deploy, train, invoke, and manage models on AWS Neuron hardware
+- **SageMaker AI Neuron MCP** — Deploy, train, invoke, and manage models on AWS Neuron hardware
 
 Together they enable an end-to-end workflow from the IDE: discover a model → recommend an instance → fine-tune on Trainium → deploy on Inferentia → run inference — all through natural language in Kiro chat. Kiro uses Claude to ground and validate model responses for accuracy.
 
@@ -53,21 +53,21 @@ Together they enable an end-to-end workflow from the IDE: discover a model → r
 ### Deployment & Inference
 | Tool | Description |
 |---|---|
-| `deploy_model` | Deploy a Hugging Face model to a SageMaker endpoint with Neuron containers. Supports both Hub models and fine-tuned models from S3. Checks for existing endpoints and polls until InService. |
+| `deploy_model` | Deploy a Hugging Face model to a SageMaker AI endpoint with Neuron containers. Supports both Hub models and fine-tuned models from S3. Checks for existing endpoints and polls until InService. |
 | `invoke_endpoint` | Send a prompt to a deployed endpoint and return generated text. Applies Qwen3 chat template, strips thinking tokens, and auto-retries up to 3 times during Neuron cold-start compilation. |
 
 ### Training
 | Tool | Description |
 |---|---|
-| `create_training_job` | Launch a fine-tuning job on Trainium via SageMaker. Uses LoRA with optimum-neuron's NeuronSFTTrainer. Includes two-phase Neuron compilation, auto-consolidates adapters, merges into base model, and produces deployment-ready artifacts. |
-| `describe_training_job` | Get details and status of a SageMaker training job including instance type, start/end times, and S3 model artifact location. |
+| `create_training_job` | Launch a fine-tuning job on Trainium via SageMaker AI. Uses LoRA with optimum-neuron's NeuronSFTTrainer. Includes two-phase Neuron compilation, auto-consolidates adapters, merges into base model, and produces deployment-ready artifacts. |
+| `describe_training_job` | Get details and status of a SageMaker AI training job including instance type, start/end times, and S3 model artifact location. |
 
 ### Endpoint Management
 | Tool | Description |
 |---|---|
-| `list_endpoints` | List active SageMaker endpoints, optionally filtered by status (InService, Creating, Failed, All). |
-| `describe_endpoint` | Get details of a SageMaker endpoint including status, creation time, and ARN. |
-| `delete_endpoint` | Delete a SageMaker endpoint. Requires manual approval in Kiro. |
+| `list_endpoints` | List active SageMaker AI endpoints, optionally filtered by status (InService, Creating, Failed, All). |
+| `describe_endpoint` | Get details of a SageMaker AI endpoint including status, creation time, and ARN. |
+| `delete_endpoint` | Delete a SageMaker AI endpoint. Requires manual approval in Kiro. |
 | `wait_for_endpoint` | Poll an endpoint every 2 minutes until it reaches InService or fails. Times out after 15 minutes. |
 
 ### Recommendation
@@ -144,7 +144,7 @@ Kiro uses Claude as an intelligent layer on top of deployed models. When the dep
 
 ## Notebook
 
-`Huggingface-kiro-powers.ipynb` provides a step-by-step walkthrough for testing all 9 tools in Amazon SageMaker Studio, including fine-tuning on Trainium and deployment on Inferentia.
+`Huggingface-kiro-powers.ipynb` provides a step-by-step walkthrough for testing all 9 tools in Amazon SageMaker AI Studio, including fine-tuning on Trainium and deployment on Inferentia.
 
 ## Gradio Demo
 
@@ -158,7 +158,7 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ENDPOINT_NAME` | SageMaker endpoint name | `qwen3-finetuned-kiro` |
+| `ENDPOINT_NAME` | SageMaker AI endpoint name | `qwen3-finetuned-kiro` |
 | `AWS_DEFAULT_REGION` | AWS region | `us-west-2` |
 | `MAX_NEW_TOKENS` | Max tokens to generate | `512` |
 | `AWS_PROFILE` | AWS CLI profile | `default` |
@@ -176,7 +176,7 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
 ```
 ├── power.json                          # Power manifest
-├── Huggingface-kiro-powers.ipynb       # SageMaker Studio testing notebook
+├── Huggingface-kiro-powers.ipynb       # SageMaker AI Studio testing notebook
 ├── demo/
 │   └── app.py                          # Gradio chat demo
 ├── steering/                           # Agent steering docs
@@ -201,10 +201,73 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
 ## Security
 
+### Shared Responsibility Model
+
+This solution follows the [AWS Shared Responsibility Model](https://aws.amazon.com/compliance/shared-responsibility-model/):
+
+**AWS Responsibilities:**
+- Securing the underlying infrastructure for Amazon SageMaker AI, AWS Trainium, and AWS Inferentia
+- Patching and maintaining Neuron DLC container images
+- Physical security of data centers and network infrastructure
+
+**Customer Responsibilities:**
+- Configuring IAM roles and policies with least-privilege access
+- Securing data in transit and at rest (encryption keys, S3 bucket policies)
+- Network configuration (VPC, security groups, endpoint policies)
+- Monitoring and logging (CloudTrail, CloudWatch)
+- Application code security and dependency management
+- Endpoint lifecycle management and cost control
+
+### Built-in Security Controls
+
 - No hardcoded container image tags — dynamically queries ECR for latest patched images
 - No hardcoded credentials — all via environment variables or IAM roles
 - No embedded scripts — training scripts are separate files
 - Destructive tools (deploy, delete, train) require manual approval in Kiro
+
+### IAM Permissions
+
+The IAM role specified in `SAGEMAKER_ROLE_ARN` requires the following minimum permissions:
+
+**For Deployment (deploy_model):**
+- `sagemaker:CreateModel`, `CreateEndpoint`, `CreateEndpointConfig`, `DescribeEndpoint`, `DeleteEndpoint`
+- `s3:GetObject` on model artifact locations
+- `ecr:GetAuthorizationToken`, `BatchCheckLayerAvailability`, `GetDownloadUrlForLayer`, `BatchGetImage`
+- `logs:CreateLogGroup`, `CreateLogStream`, `PutLogEvents`
+
+**For Training (create_training_job):**
+- `sagemaker:CreateTrainingJob`, `DescribeTrainingJob`
+- `s3:GetObject`, `PutObject`, `ListBucket` on training data and output paths
+- `ecr:GetAuthorizationToken`, `BatchCheckLayerAvailability`, `GetDownloadUrlForLayer`, `BatchGetImage`
+
+**For Inference (invoke_endpoint):**
+- `sagemaker-runtime:InvokeEndpoint`
+
+### S3 Security Requirements
+
+All S3 buckets used by this solution must be configured with:
+- **Block Public Access**: Enable all four settings
+- **Encryption at rest**: Configure server-side encryption (SSE-S3 or SSE-KMS)
+- **TLS/HTTPS enforcement**: Add bucket policy requiring `aws:SecureTransport`
+- **Access logging**: Enable S3 access logging for audit trails
+
+### Encryption
+
+- **At rest**: Amazon SageMaker AI encrypts data at rest by default using AWS-managed keys. For additional control, specify a customer-managed KMS key.
+- **In transit**: All API calls use TLS 1.2+. Enable inter-container traffic encryption for distributed training.
+
+### Service-Specific Security
+
+- **Amazon SageMaker AI**: Use VPC mode for endpoints to isolate network traffic. Enable network isolation for training jobs when internet access is not required.
+- **AWS Neuron**: Neuron compilation cache may contain model architecture information — secure S3 bucket access accordingly.
+- **Amazon ECR**: Enable image scanning to detect vulnerabilities. This solution dynamically fetches the latest patched images.
+- **Amazon S3**: Use bucket policies to restrict access to authorized principals only.
+
+### Third-Party Dependencies
+
+This solution integrates with the [Hugging Face MCP Server](https://huggingface.co/mcp), a remote third-party service for model discovery. Users should review the [Hugging Face Terms of Service](https://huggingface.co/terms-of-service) and assess the security implications of this external dependency for their use case.
+
+For more information, see [Security in Amazon SageMaker](https://docs.aws.amazon.com/sagemaker/latest/dg/security.html).
 
 ## License
 

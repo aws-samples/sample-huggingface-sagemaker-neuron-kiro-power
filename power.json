@@ -1,7 +1,7 @@
 {
   "name": "huggingface-on-aws",
   "version": "0.1.0",
-  "description": "Deploy and train Hugging Face models on AWS with SageMaker and Neuron (Trainium/Inferentia). Provides MCP tools for endpoint management, training jobs, and instance recommendations, plus steering for TorchNeuron, distributed training, and model optimization.",
+  "description": "Deploy and train Hugging Face models on AWS with SageMaker AI and Neuron (Trainium/Inferentia). Provides MCP tools for endpoint management, training jobs, and instance recommendations, plus steering for TorchNeuron, distributed training, and model optimization.",
   "author": "AWS",
   "license": "Apache-2.0",
   "repository": "https://github.com/aws-samples/sample-huggingface-sagemaker-neuron-kiro-power",
@@ -18,7 +18,7 @@
       },
       {
         "name": "sagemaker-neuron",
-        "description": "Deploy and train Hugging Face models on SageMaker with Neuron containers",
+        "description": "Deploy and train Hugging Face models on SageMaker AI with Neuron containers",
         "type": "local",
         "command": "python",
         "args": ["-m", "sagemaker_neuron_server"],
@@ -36,7 +36,7 @@
     },
     {
       "path": "./steering/sagemaker-deployment.md",
-      "description": "SageMaker deployment patterns, DLC containers, SDK usage, and instance selection"
+      "description": "SageMaker AI deployment patterns, DLC containers, SDK usage, and instance selection"
     },
     {
       "path": "./steering/distributed-training.md",

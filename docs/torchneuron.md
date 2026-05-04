@@ -8,7 +8,7 @@ TorchNeuron is a native PyTorch backend for AWS Trainium and Inferentia hardware
 
 ## Current Path (torch-neuronx with XLA)
 
-This is what works today on SageMaker and EC2.
+This is what works today on SageMaker AI and EC2.
 
 ### Device Placement
 

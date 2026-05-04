@@ -12,3 +12,5 @@ build/
 .gradio/
 __MACOSX/
 ._*
+build/
+~/
