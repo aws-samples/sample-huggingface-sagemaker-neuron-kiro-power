@@ -143,7 +143,7 @@ def register_deploy_tools(mcp: FastMCP):
         import time as _time
         deadline = _time.time() + 15 * 60
         while _time.time() < deadline:
-            _time.sleep(120)  # nosemgrep: intentional polling interval
+            _time.sleep(120)  # nosemgrep: arbitrary-sleep
             try:
                 ep = sm.describe_endpoint(EndpointName=endpoint_name)
                 status = ep["EndpointStatus"]
