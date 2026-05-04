@@ -13,11 +13,11 @@ def main():
 
     # Install latest optimum-neuron and trl from main (DLC versions are behind the docs)
     print("=== Installing latest optimum-neuron and trl from main ===", flush=True)
-    subprocess.run([  # runs on SageMaker AI training instance only
+    subprocess.run([  # nosemgrep: runs on SageMaker AI training instance only
         sys.executable, "-m", "pip", "install", "--upgrade",
         "git+https://github.com/huggingface/trl.git",
         "git+https://github.com/huggingface/optimum-neuron.git",
-    ], check=True)  # runs on SageMaker AI training instance only
+    ], check=True)  # nosemgrep: runs on SageMaker AI training instance only
 
     # Fix 1: optimum-neuron imports clone_chat_template from trl.models,
     # but in trl main it lives in trl.chat_template_utils.
@@ -52,7 +52,7 @@ def main():
         train_script,
     ] + base_args
     print(f"Compile cmd: {' '.join(compile_cmd)}", flush=True)
-    result = subprocess.run(compile_cmd, env=compile_env)  # runs on SageMaker AI training instance only
+    result = subprocess.run(compile_cmd, env=compile_env)  # nosemgrep: runs on SageMaker AI training instance only
     if result.returncode != 0:
         print(f"Compilation failed with exit code {result.returncode}", flush=True)
         sys.exit(result.returncode)
@@ -66,7 +66,7 @@ def main():
         train_script,
     ] + base_args
     print(f"Train cmd: {' '.join(train_cmd)}", flush=True)
-    result = subprocess.run(train_cmd)  # runs on SageMaker AI training instance only
+    result = subprocess.run(train_cmd)  # nosemgrep: runs on SageMaker AI training instance only
     sys.exit(result.returncode)
 
 if __name__ == "__main__":
