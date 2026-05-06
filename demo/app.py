@@ -64,7 +64,7 @@ demo = gr.ChatInterface(
         f"Powered by the HF + AWS Kiro Power MCP integration."
     ),
     examples=[
-        "What is the capital of France?",
+        "What is transfer learning?",
         "What is machine learning?",
         "Explain what a neural network is",
         "What is deep learning?",

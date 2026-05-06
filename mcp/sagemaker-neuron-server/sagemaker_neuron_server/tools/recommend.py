@@ -104,6 +104,7 @@ def register_recommend_tools(mcp: FastMCP):
             "neuron_compile_params": compile_params,
             "available_instances": container.get("instances", []),
             "notes": _get_notes(category, use_case),
+            "disclaimer": "Instance recommendations are based on model size and Neuron hardware specifications. Verify model architecture compatibility with Neuron SDK at awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/models/index.html before deploying to production.",
         })
 
 

@@ -92,7 +92,7 @@ These queries have been tested and produce reliable results. Replace `my-endpoin
 - "Search for the best text generation model under 1B parameters and recommend an AWS Neuron instance"
 - "Show me the status of my training job"
 - "Deploy my fine-tuned model from s3://my-bucket/model.tar.gz to inf2.8xlarge endpoint named my-endpoint"
-- "Ask my-endpoint: What is the capital of France?"
+- "Ask my-endpoint: What is transfer learning?"
 - "Ask my-endpoint: What is machine learning?"
 - "Ask my-endpoint: Explain what a neural network is"
 - "Ask my-endpoint: What is deep learning?"
