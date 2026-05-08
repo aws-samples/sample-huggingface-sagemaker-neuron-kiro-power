@@ -19,3 +19,6 @@ wikitext (wikitext-2-raw-v1) -- https://huggingface.co/datasets/wikitext -- Crea
 
 Note: Models and datasets are fetched at runtime and are not distributed with this repository.
 Users are responsible for reviewing and complying with the respective licenses.
+
+External Services:
+Hugging Face MCP Server -- https://huggingface.co/mcp -- Subject to Hugging Face Terms of Service (https://huggingface.co/terms-of-service)

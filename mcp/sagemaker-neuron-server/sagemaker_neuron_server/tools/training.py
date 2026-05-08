@@ -123,6 +123,7 @@ def register_training_tools(mcp: FastMCP):
                 tmp_dir = tempfile.mkdtemp(prefix="hf_train_")
                 shutil.copy2(_SCRIPTS_DIR / "train.py", os.path.join(tmp_dir, "train.py"))
                 shutil.copy2(_SCRIPTS_DIR / "launch.py", os.path.join(tmp_dir, "launch.py"))
+                shutil.copy2(_SCRIPTS_DIR / "requirements.txt", os.path.join(tmp_dir, "requirements.txt"))
                 source_dir = tmp_dir
                 entry_point = "launch.py"
             elif not entry_point:

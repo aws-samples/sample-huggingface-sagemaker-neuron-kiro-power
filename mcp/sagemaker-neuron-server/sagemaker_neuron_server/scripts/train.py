@@ -11,7 +11,7 @@ from transformers import AutoTokenizer, HfArgumentParser
 from optimum.neuron import NeuronSFTConfig, NeuronSFTTrainer, NeuronTrainingArguments
 from optimum.neuron.models.training import NeuronModelForCausalLM
 
-# Dataset — using wikitext (CC BY-SA 3.0) for demo; override via --dataset_name / --dataset_config
+# Dataset — using wikitext for demo; override via --dataset_name / --dataset_config
 def load_and_prepare_dataset(tokenizer, dataset_name, dataset_config):
     dataset = load_dataset(dataset_name, dataset_config, split="train[:2000]")
     dataset = dataset.filter(lambda x: x["text"] is not None and len(x["text"].strip()) > 10)
