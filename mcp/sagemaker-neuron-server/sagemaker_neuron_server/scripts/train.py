@@ -85,7 +85,6 @@ def train(model_id, tokenizer, dataset, training_args):
         model = model.merge_and_unload()
         # Ensure torch_dtype is set in config (needed by Neuron inference toolkit)
         if model.config.torch_dtype is None:
-            import torch
             model.config.torch_dtype = torch.bfloat16
         model.save_pretrained(training_args.output_dir)
         AutoTokenizer.from_pretrained(script_args.model_id).save_pretrained(training_args.output_dir)
