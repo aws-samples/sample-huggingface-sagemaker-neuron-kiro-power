@@ -59,7 +59,7 @@ Together they enable an end-to-end workflow from the IDE: discover a model → r
 ### Training
 | Tool | Description |
 |---|---|
-| `create_training_job` | Launch a fine-tuning job on Trainium via SageMaker AI. Uses LoRA with optimum-neuron's NeuronSFTTrainer. Includes two-phase Neuron compilation, auto-consolidates adapters, merges into base model, and produces deployment-ready artifacts. |
+| `create_training_job` | Launch a fine-tuning job on Trainium via SageMaker AI. Uses LoRA with optimum-neuron's NeuronSFTTrainer. Includes two-phase Neuron compilation and auto-consolidates adapters. Output adapter can be merged with the base model for deployment (see Workflow). |
 | `describe_training_job` | Get details and status of a SageMaker AI training job including instance type, start/end times, and S3 model artifact location. |
 
 ### Endpoint Management
@@ -76,6 +76,13 @@ Together they enable an end-to-end workflow from the IDE: discover a model → r
 | `recommend_instance` | Recommend the optimal Neuron instance type for any Hugging Face model. Auto-derives Neuron compile parameters (TP degree, sequence length, batch size) based on model size and instance HBM. Fetches model metadata from HF Hub or accepts user-provided parameter count. |
 
 Also integrates with the [Hugging Face MCP Server](https://huggingface.co/mcp) for model/dataset search on HF Hub.
+
+## Workflow
+
+1. **Train** — Fine-tune a model using `create_training_job` (outputs LoRA adapter to S3)
+2. **Merge** — Merge the adapter weights into the base model and repackage as `model.tar.gz` (use `model.merge_and_unload()` from [PEFT](https://huggingface.co/docs/peft/en/developer_guides/lora#merge-lora-weights-into-the-base-model))
+3. **Deploy** — Deploy the merged model using `deploy_model`
+4. **Invoke** — Send prompts to the endpoint using `invoke_endpoint`
 
 ## Demo Flow
 
