@@ -13,7 +13,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
                           │  │                                            │  │
                           │  │  Steering Docs:                            │  │
                           │  │   • TorchNeuron Patterns                   │  │
-                          │  │   • SageMaker AI Deployment                │
+                          │  │   • SageMaker AI Deployment                │  |
                           │  │   • Distributed Training                   │  │
                           │  │   • Model Optimization                     │  │
                           │  │                                            │  │
