@@ -13,7 +13,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
                           │  │                                            │  │
                           │  │  Steering Docs:                            │  │
                           │  │   • TorchNeuron Patterns                   │  │
-                          │  │   • SageMaker AI Deployment                   │  │
+                          │  │   • SageMaker AI Deployment                │
                           │  │   • Distributed Training                   │  │
                           │  │   • Model Optimization                     │  │
                           │  │                                            │  │
@@ -21,7 +21,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   │ Amazon Bedrock   │    │  │   • Hugging Face MCP Server (remote) ──────┼──┼──► Hugging Face Hub
   │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
   │ Claude Sonnet 4.x│◄──-┼──┼──►                                         │  │
-  │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
+  │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom)┼──---► Amazon ECR
   │  grounds,        │    │  │     11 tools: recommend, deploy, train,    │  │    (DLC images)
   │  validates)      │    │  │     invoke, list, describe, delete,        │  │
   └──────────────────┘    │  │     wait_for_endpoint, describe_job ───────┼──┼───┐
