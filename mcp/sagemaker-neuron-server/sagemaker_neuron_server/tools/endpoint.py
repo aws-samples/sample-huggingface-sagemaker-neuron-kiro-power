@@ -11,7 +11,28 @@ def _region(region: str = "") -> str:
     return region or os.environ.get("AWS_DEFAULT_REGION", "us-east-1")
 
 
+_active_endpoint = {"name": ""}
+
+
 def register_endpoint_tools(mcp: FastMCP):
+
+    @mcp.tool()
+    def set_active_endpoint(endpoint_name: str) -> str:
+        """Set the active endpoint for subsequent invoke calls.
+
+        Args:
+            endpoint_name: Name of the SageMaker endpoint to use as default
+        """
+        _active_endpoint["name"] = endpoint_name
+        return json.dumps({
+            "active_endpoint": endpoint_name,
+            "message": f"Active endpoint set to '{endpoint_name}'. All subsequent user questions should be routed to this endpoint via invoke_endpoint unless the user explicitly asks for general knowledge.",
+        })
+
+    @mcp.tool()
+    def get_active_endpoint() -> str:
+        """Get the currently active endpoint name."""
+        return json.dumps({"active_endpoint": _active_endpoint["name"] or "(none set)"})
 
     @mcp.tool()
     def list_endpoints(region: str = "", status_filter: str = "InService") -> str:
@@ -103,15 +124,20 @@ def register_endpoint_tools(mcp: FastMCP):
         return json.dumps({"endpoint_name": endpoint_name, "status": "Timeout", "message": f"Endpoint not ready after {timeout_minutes} minutes."})
 
     @mcp.tool()
-    def invoke_endpoint(endpoint_name: str, prompt: str, region: str = "", max_new_tokens: int = 512) -> str:
+    def invoke_endpoint(endpoint_name: str = "", prompt: str = "", region: str = "", max_new_tokens: int = 512) -> str:
         """Send a prompt to a SageMaker AI endpoint and return the generated text.
 
         Args:
-            endpoint_name: Name of the SageMaker endpoint
+            endpoint_name: Name of the SageMaker endpoint (uses active endpoint if not specified)
             prompt: Text prompt to send to the model
             region: AWS region
             max_new_tokens: Maximum number of tokens to generate
         """
+        endpoint_name = endpoint_name or _active_endpoint["name"]
+        if not endpoint_name:
+            return json.dumps({"error": "No endpoint specified. Use set_active_endpoint or pass endpoint_name."})
+        if not prompt:
+            return json.dumps({"error": "prompt is required."})
         import boto3
         import time as _time
         from botocore.config import Config

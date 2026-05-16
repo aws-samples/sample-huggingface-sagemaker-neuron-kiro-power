@@ -60,7 +60,7 @@ demo = gr.ChatInterface(
     title="🤗 Fine-tuning and Deploying Hugging Face Models on AWS Neuron using Kiro Power",
     description=(
         f"Chat with a fine-tuned **Qwen3-0.6B** model deployed on "
-        f"**Amazon SageMaker** with **AWS Inferentia2** (endpoint: `{ENDPOINT_NAME}`). "
+        f"**Amazon SageMaker AI** with **AWS Inferentia2** (endpoint: `{ENDPOINT_NAME}`). "
         f"Powered by the HF + AWS Kiro Power MCP integration."
     ),
     examples=[

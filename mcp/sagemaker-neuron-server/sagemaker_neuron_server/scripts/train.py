@@ -3,6 +3,8 @@
 Follows the official HF tutorial exactly:
 https://huggingface.co/docs/optimum-neuron/training_tutorials/finetune_qwen3
 """
+import json
+import os
 import torch
 from dataclasses import dataclass, field
 from datasets import load_dataset
@@ -84,15 +86,21 @@ def train(model_id, tokenizer, dataset, training_args):
         model = PeftModel.from_pretrained(base, adapter_dir, config=config)
         model = model.merge_and_unload()
         # Ensure torch_dtype is set in config (needed by Neuron inference toolkit)
-        if model.config.torch_dtype is None:
-            model.config.torch_dtype = torch.bfloat16
+        model.config.torch_dtype = torch.bfloat16
         model.save_pretrained(training_args.output_dir)
+        # Force torch_dtype in saved config.json (some models don't serialize it correctly)
+        config_path = os.path.join(training_args.output_dir, "config.json")
+        with open(config_path, "r", encoding="utf-8") as f:
+            cfg = json.load(f)
+        cfg["torch_dtype"] = "bfloat16"
+        with open(config_path, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, indent=2)
         AutoTokenizer.from_pretrained(script_args.model_id).save_pretrained(training_args.output_dir)
         # Add inference.py to fix Neuron HLO write path in read-only containers
         code_dir = os.path.join(training_args.output_dir, "code")
         os.makedirs(code_dir, exist_ok=True)
         with open(os.path.join(code_dir, "inference.py"), "w", encoding="utf-8") as f:
-            f.write("import os\\nos.chdir('/tmp')\\n")
+            f.write("import os\nos.chdir('/tmp')\n")
         print(f"=== Merged model saved to {training_args.output_dir} ===", flush=True)
 
 @dataclass
@@ -102,7 +110,6 @@ class ScriptArguments:
     dataset_config: str = field(default="wikitext-2-raw-v1", metadata={"help": "HF dataset config"})
 
 if __name__ == "__main__":
-    import os
     parser = HfArgumentParser((ScriptArguments, NeuronTrainingArguments))
     script_args, training_args = parser.parse_args_into_dataclasses()
     # Override output_dir to SageMaker model dir

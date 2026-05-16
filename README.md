@@ -22,7 +22,7 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
   │ Claude Sonnet 4.x│◄──-┼──┼──►                                         │  │
   │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom) ──┼──┼──► Amazon ECR
-  │  grounds,        │    │  │     9 tools: recommend, deploy, train,     │  │    (DLC images)
+  │  grounds,        │    │  │     11 tools: recommend, deploy, train,    │  │    (DLC images)
   │  validates)      │    │  │     invoke, list, describe, delete,        │  │
   └──────────────────┘    │  │     wait_for_endpoint, describe_job ───────┼──┼───┐
                           │  └────────────────────────────────────────────┘  │   │
@@ -48,7 +48,7 @@ This Power gives Kiro two complementary MCP servers:
 
 Together they enable an end-to-end workflow from the IDE: discover a model → recommend an instance → fine-tune on Trainium → deploy on Inferentia → run inference — all through natural language in Kiro chat. Kiro uses Claude to ground and validate model responses for accuracy.
 
-## MCP Tools (9)
+## MCP Tools (11)
 
 ### Deployment & Inference
 | Tool | Description |
@@ -69,6 +69,8 @@ Together they enable an end-to-end workflow from the IDE: discover a model → r
 | `describe_endpoint` | Get details of a SageMaker AI endpoint including status, creation time, and ARN. |
 | `delete_endpoint` | Delete a SageMaker AI endpoint. Requires manual approval in Kiro. |
 | `wait_for_endpoint` | Poll an endpoint every 2 minutes until it reaches InService or fails. Times out after 15 minutes. |
+| `set_active_endpoint` | Set the active endpoint for subsequent invoke calls. Questions are automatically routed to this endpoint. |
+| `get_active_endpoint` | Get the currently active endpoint name. |
 
 ### Recommendation
 | Tool | Description |
@@ -79,10 +81,10 @@ Also integrates with the [Hugging Face MCP Server](https://huggingface.co/mcp) f
 
 ## Workflow
 
-1. **Train** — Fine-tune a model using `create_training_job` (outputs LoRA adapter to S3)
-2. **Merge** — Merge the adapter weights into the base model and repackage as `model.tar.gz` (use `model.merge_and_unload()` from [PEFT](https://huggingface.co/docs/peft/en/developer_guides/lora#merge-lora-weights-into-the-base-model))
-3. **Deploy** — Deploy the merged model using `deploy_model`
-4. **Invoke** — Send prompts to the endpoint using `invoke_endpoint`
+1. **Train** — Fine-tune a model using `create_training_job` (automatically merges adapter into base model)
+2. **Deploy** — Deploy the model using `deploy_model`
+3. **Set Endpoint** — Set the active endpoint using `set_active_endpoint`
+4. **Invoke** — Ask questions directly (routed to active endpoint via `invoke_endpoint`)
 
 ## Demo Flow
 
@@ -90,7 +92,7 @@ Also integrates with the [Hugging Face MCP Server](https://huggingface.co/mcp) f
 2. **Recommend** — "Recommend an AWS Neuron instance for Qwen3-0.6B" (auto-derives compile params)
 3. **Training proof** — "Show me training job qwen3-0-6b-finetune-..." (completed on trn1.2xlarge)
 4. **Deploy** — "Deploy my fine-tuned model to inf2.8xlarge" (checks if exists, polls until ready)
-5. **Inference** — "Ask the endpoint: What is machine learning?" (clean response via Neuron)
+5. **Inference** — "What is machine learning?" (routed to active endpoint via Neuron)
 
 ## Sample Queries
 
@@ -99,11 +101,12 @@ These queries have been tested and produce reliable results. Replace `my-endpoin
 - "Search for the best text generation model under 1B parameters and recommend an AWS Neuron instance"
 - "Show me the status of my training job"
 - "Deploy my fine-tuned model from s3://my-bucket/model.tar.gz to inf2.8xlarge endpoint named my-endpoint"
-- "Ask my-endpoint: What is transfer learning?"
-- "Ask my-endpoint: What is machine learning?"
-- "Ask my-endpoint: Explain what a neural network is"
-- "Ask my-endpoint: What is deep learning?"
-- "Ask my-endpoint: What is the difference between AI and machine learning?"
+- "Set active endpoint to my-endpoint"
+- "What is transfer learning?"
+- "What is machine learning?"
+- "Explain what a neural network is"
+- "What is deep learning?"
+- "What is the difference between AI and machine learning?"
 - "Describe endpoint my-endpoint"
 - "Delete endpoint my-endpoint"
 
@@ -149,10 +152,6 @@ Check the MCP dropdown in Kiro — both servers should show as connected.
 
 Kiro uses Claude as an intelligent layer on top of deployed models. When the deployed model returns a response, Claude validates the output for accuracy and adds context — catching inaccuracies and providing corrections. This grounding ensures users get reliable information even from smaller models.
 
-## Notebook
-
-`Huggingface-kiro-powers.ipynb` provides a step-by-step walkthrough for testing all 9 tools in Amazon SageMaker AI Studio, including fine-tuning on Trainium and deployment on Inferentia.
-
 ## Gradio Demo
 
 ```bash
@@ -183,7 +182,6 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 
 ```
 ├── power.json                          # Power manifest
-├── Huggingface-kiro-powers.ipynb       # SageMaker AI Studio testing notebook
 ├── demo/
 │   └── app.py                          # Gradio chat demo
 ├── steering/                           # Agent steering docs
@@ -191,7 +189,7 @@ Opens a chat UI at `http://127.0.0.1:7860` connected to your deployed endpoint.
 │   ├── run_server.sh                   # Auto-venv launcher
 │   ├── pyproject.toml                  # Package config
 │   └── sagemaker_neuron_server/
-│       ├── __init__.py                 # Registers all 9 tools with FastMCP
+│       ├── __init__.py                 # Registers all 11 tools with FastMCP
 │       ├── __main__.py                 # Entry point for python -m
 │       ├── tools/
 │       │   ├── deploy.py               # deploy_model
