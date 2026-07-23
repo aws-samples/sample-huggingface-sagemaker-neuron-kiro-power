@@ -153,25 +153,27 @@ def register_training_tools(mcp: FastMCP):
 
             # No distribution parameter — launch.py handles torchrun internally
             # with the correct nproc_per_node = tensor_parallel_size.
-            estimator = HuggingFace(
-                entry_point=entry_point,
-                source_dir=source_dir,
-                role=role_arn,
-                instance_type=instance_type,
-                instance_count=instance_count,
-                volume_size=volume_size_gb,
-                image_uri=image_uri,
-                py_version="py310",
-                output_path=s3_output_path,
-                max_run=max_runtime_seconds,
-                hyperparameters=hp,
-                sagemaker_session=sess,
-                base_job_name=job_name,
-                environment=env,
-            )
+            estimator_kwargs = {
+                "entry_point": entry_point,
+                "source_dir": source_dir,
+                "role": role_arn,
+                "instance_type": instance_type,
+                "instance_count": instance_count,
+                "volume_size": volume_size_gb,
+                "image_uri": image_uri,
+                "py_version": "py310",
+                "output_path": s3_output_path,
+                "max_run": max_runtime_seconds,
+                "hyperparameters": hp,
+                "sagemaker_session": sess,
+                "base_job_name": job_name,
+                "environment": env,
+            }
             if kms_key_id:
                 estimator_kwargs["volume_kms_key"] = kms_key_id
                 estimator_kwargs["output_kms_key"] = kms_key_id
+
+            estimator = HuggingFace(**estimator_kwargs)
 
             estimator.fit(wait=False)
             actual_job_name = estimator.latest_training_job.name

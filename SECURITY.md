@@ -48,14 +48,19 @@ Create a least-privilege IAM role for SageMaker AI execution. Scope permissions 
             "Resource": ["arn:aws:s3:::<bucket-name>", "arn:aws:s3:::<bucket-name>/*"]
         },
         {
+            "Comment": "ecr:GetAuthorizationToken requires Resource: '*' by API design",
+            "Effect": "Allow",
+            "Action": ["ecr:GetAuthorizationToken"],
+            "Resource": "*"
+        },
+        {
             "Effect": "Allow",
             "Action": [
-                "ecr:GetAuthorizationToken",
                 "ecr:BatchCheckLayerAvailability",
                 "ecr:GetDownloadUrlForLayer",
                 "ecr:BatchGetImage"
             ],
-            "Resource": "*"
+            "Resource": "arn:aws:ecr:<region>:<account-id>:repository/huggingface-*"
         },
         {
             "Effect": "Allow",
