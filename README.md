@@ -24,7 +24,8 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom)┼──---► Amazon ECR
   │  grounds,        │    │  │     11 tools: recommend, deploy, train,    │  │    (DLC images)
   │  validates)      │    │  │     invoke, list, describe, delete,        │  │
-  └──────────────────┘    │  │     wait_for_endpoint, describe_job ───────┼──┼───┐
+  └──────────────────┘    │  │     wait_for_endpoint, describe_job,       │  │
+                          │  │    set_active_endpoint, get_active_endpoint┼──┼───┐
                           │  └────────────────────────────────────────────┘  │   │
                           │                                                  │   │
                           └──────────────────────────────────────────────────┘   │
