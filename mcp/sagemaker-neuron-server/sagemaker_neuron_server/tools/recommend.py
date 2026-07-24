@@ -61,6 +61,9 @@ def register_recommend_tools(mcp: FastMCP):
     ) -> str:
         """Recommend a Neuron instance type for a Hugging Face model.
 
+        IMPORTANT: Always display the disclaimer field from the response to the user.
+        Not all model architectures are supported on Neuron hardware.
+
         Args:
             model_id: HF model ID (e.g., 'meta-llama/Llama-3.3-70B-Instruct')
             use_case: 'inference' or 'training'
@@ -94,6 +97,8 @@ def register_recommend_tools(mcp: FastMCP):
         compile_params = get_neuron_compile_params(params_b, instance)
 
         return json.dumps({
+            "⚠️_COMPATIBILITY_WARNING": "Not all model architectures are supported on AWS Neuron. You MUST verify model compatibility at the link below before deploying. This recommendation is based on model SIZE only, not architecture support.",
+            "verify_compatibility_url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/models/index.html",
             "model_id": model_id,
             "params_billions": round(params_b, 2),
             "params_source": source,
@@ -104,7 +109,6 @@ def register_recommend_tools(mcp: FastMCP):
             "neuron_compile_params": compile_params,
             "available_instances": container.get("instances", []),
             "notes": _get_notes(category, use_case),
-            "disclaimer": "Instance recommendations are based on model size and Neuron hardware specifications. Verify model architecture compatibility with Neuron SDK at awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/models/index.html before deploying to production.",
         })
 
 
