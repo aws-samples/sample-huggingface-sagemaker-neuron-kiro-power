@@ -20,10 +20,10 @@ Kiro Power for fine-tuning and deploying Hugging Face models on AWS with **Amazo
   ┌──────────────────┐    │  │  MCP Servers:                              │  │
   │ Amazon Bedrock   │    │  │   • Hugging Face MCP Server (remote) ──────┼──┼──► Hugging Face Hub
   │                  │    │  │     Model discovery, search, model cards   │  │    (models, datasets)
-  │ Claude Sonnet 4.x│◄──-┼──┼──►                                         │  │
-  │ (orchestrates,   │    │  │   • SageMaker AI Neuron MCP Server (custom)┼──---► Amazon ECR
-  │  grounds,        │    │  │     11 tools: recommend, deploy, train,    │  │    (DLC images)
-  │  validates)      │    │  │     invoke, list, describe, delete,        │  │
+  │ Amazon Bedrock   │◄──-┼──┼──►                                         │  │
+  │ (orchestrates    │    │  │   • SageMaker AI Neuron MCP Server (custom)┼──---► Amazon ECR
+  │  tool calls)     │    │  │     11 tools: recommend, deploy, train,    │  │    (DLC images)
+  │                  │    │  │     invoke, list, describe, delete,        │  │
   └──────────────────┘    │  │     wait_for_endpoint, describe_job,       │  │
                           │  │    set_active_endpoint, get_active_endpoint┼──┼───┐
                           │  └────────────────────────────────────────────┘  │   │
@@ -47,7 +47,7 @@ This Power gives Kiro two complementary MCP servers:
 - **HF Hub MCP** — Model discovery, search, and metadata from Hugging Face Hub
 - **SageMaker AI Neuron MCP** — Deploy, train, invoke, and manage models on AWS Neuron hardware
 
-Together they enable an end-to-end workflow from the IDE: discover a model → recommend an instance → fine-tune on Trainium → deploy on Inferentia → run inference — all through natural language in Kiro chat. Kiro uses Claude to ground and validate model responses for accuracy.
+Together they enable an end-to-end workflow from the IDE: discover a model → recommend an instance → fine-tune on Trainium → deploy on Inferentia → run inference — all through natural language in Kiro chat, powered by Amazon Bedrock.
 
 ## MCP Tools (11)
 
@@ -148,10 +148,6 @@ The `run_server.sh` script auto-creates a Python virtual environment and install
 ### 3. Verify
 
 Check the MCP dropdown in Kiro — both servers should show as connected.
-
-## Grounding with Claude
-
-Kiro uses Claude as an intelligent layer on top of deployed models. When the deployed model returns a response, Claude validates the output for accuracy and adds context — catching inaccuracies and providing corrections. This grounding ensures users get reliable information even from smaller models.
 
 ## Gradio Demo
 
